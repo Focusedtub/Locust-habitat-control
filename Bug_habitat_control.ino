@@ -19,7 +19,7 @@ void setup() {
   TimeElements ccTimetm;
   
   //initialize serial port
-  Serial.begin(115200);
+  Serial.begin(19200);
   //command line notifier
   Serial.println("Bug Habitat Control Start");
   
@@ -73,13 +73,13 @@ void loop() {
 
 //func sync will get the current time from its counterpart module
 //Current sync function only syncs minutes and seconds
-void sync(){
+time_t sync(){
   TimeElements ccTimetm;
 
   sendTime();
   ccTimetm = recTime();
 
-  setTime(hour(),ccTimetm.Minute,ccTimetm.Second,day(),month(),year());
+  return makeTime(ccTimetm);
 }
 
 //func tReset resets the time to the CC time
