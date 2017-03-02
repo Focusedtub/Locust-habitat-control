@@ -40,7 +40,7 @@ void setup() {
 
 void loop() {
   //placeholder variables
-  int temp,humid;
+  int temp,humid,lum;
   //proper used
   int sBit,diff,test;
   
@@ -68,23 +68,24 @@ void loop() {
         sBit = Serial.read();//up for revision, may require different
                              //method for multiple bytes
       }
-    }
-    //interpret the byte
-    if(sBit ==2)
-    {
-      //time up
-      timeUp();
-    }else if(sBit == 3)
-    {
-      //time down
-      timeDown();
-    }else if(sBit == 4)
-    {
-      //reset time
-      tReset();
-    }else
-    {
-      //what?
+    
+      //interpret the byte
+      if(sBit ==2)
+      {
+        //time up
+        timeUp();
+      }else if(sBit == 3)
+      {
+        //time down
+        timeDown();
+      }else if(sBit == 4)
+      {
+        //reset time
+        tReset();
+      }else
+      {
+        //what?
+      }
     }
   }
 
@@ -98,7 +99,24 @@ void loop() {
     }
     if(Serial.available()==0)
     {
-      //Serial.write(
+      Serial.println("#|TOFILE|[");
+      //timestamp: hour:minute:second
+      Serial.print(hour());
+      Serial.print(":");
+      Serial.print(minute());
+      Serial.print(":");
+      Serial.print(second());
+      Serial.print(", ");
+      //temperature
+      Serial.print(temp);
+      Serial.print(",");;
+      //humidity
+      Serial.print(humid);
+      Serial.print(",");
+      //luminosity
+      Serial.print(lum);
+      //end of output
+      Serial.print("]#");
     }
     loopCounter=0;
     writeCount++;
