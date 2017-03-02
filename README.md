@@ -11,9 +11,7 @@ It also contains current tasks and extra information on function
 ###Current send time format
 time_t variable type between 
 ##### File Format
-Temp 1234\n
-Hum 1234\n
-Lum 1234
+Temp 1234,Hum 1234,Lum 1234
 
 ###Current task List
 Josh P.
