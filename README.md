@@ -28,7 +28,7 @@ Josh P.
 - [x]Time management/*                      */Feb 09, 2017
 - [x]Project design presentation/*          */Feb 16, 2017
 - [x]Write to file/*                        */Mar 02, 2017
-- [ ]Read time from gobetwino
+- [x]Read time from gobetwino/*             */Mar 07, 2017
 - [ ]Read from GUI
 - [ ]Technical report
 - [ ]integrate
