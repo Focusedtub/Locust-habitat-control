@@ -18,14 +18,14 @@ h:mm:ss tt
 
 ###Current task List
 Josh P.
-- [x]Project design rough                 Jan 24, 2017
-- [x]Create github                        Jan 26, 2016
-- [x]Record time                          Jan 24, 2017
-- [x]Change-time capabilities             Jan 26, 2017
-- [x]Optimize send time format            Feb 02, 2017
-- [x]Time management                      Feb 09, 2017
-- [x]Project design presentation          Feb 16, 2017
-- [x]Write to file                        Mar 02, 2017
+- [x]Project design rough/                 /Jan 24, 2017
+- [x]Create github/                        /Jan 26, 2016
+- [x]Record time/                          /Jan 24, 2017
+- [x]Change-time capabilities/             /Jan 26, 2017
+- [x]Optimize send time format/            /Feb 02, 2017
+- [x]Time management/                      /Feb 09, 2017
+- [x]Project design presentation/          /Feb 16, 2017
+- [x]Write to file/                        /Mar 02, 2017
 - [ ]Read time from gobetwino
 - [ ]Read from GUI
 - [ ]Technical report
