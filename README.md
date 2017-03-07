@@ -9,8 +9,8 @@ It also contains current tasks and extra information on function
 4. Time reset
 
 ###Current send time format
-time_t variable type between 
-##### File Format
+time_t variable type
+#####File Format
 time_stamp,1234,1234,1234
 
 ###Current task List
@@ -18,12 +18,14 @@ Josh P.
 - [x]Project design rough
 - [x]Create github
 - [x]Record time
-- [x]Change time capabilities
+- [x]Change-time capabilities
 - [x]Optimize send time format
 - [ ]Time management
 - [x]Project design presentation
-- [ ]Write to file
+- [x]Write to file
+- [ ]Read time from gobetwino
 - [ ]Read from GUI
+- [ ]integrate
 
 Ian B.
 - []
