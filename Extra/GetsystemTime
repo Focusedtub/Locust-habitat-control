@@ -1,0 +1,15 @@
+  //get the current time from the computer
+  //note: this is specifically for a windows computer
+  //if it is running another OS, will need to be changed
+  SYSTEMTIME st;
+  GetSystemTime(&st);
+
+  //placing current time into package
+  total.Year = st.wYear;
+  total.Month = st.wMonth;
+  total.Day = st.wDay;
+  total.Hour = st.wHour;
+  total.Minute = st.wMinute;
+  total.Second = st.wSecond;
+
+  return makeTime(total);
