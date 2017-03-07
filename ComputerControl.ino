@@ -152,42 +152,83 @@ int timeRoll()
 //its connected to
 time_t getTime()
 {
-  time_t t;
+    time_t t;
+  TimeElements tempTime;
+  String tempRead;
+
+  
   if(Serial.available()==0)
-  {
-    Serial.write(1);
+  {//output command to gobetwino
+    Serial.println("#S|T|[]#");
   }
   
-  while(true)
+  tempRead = Serial.readString(); //read string received from gobetwino
+
+  //interpret string
+  //Time format
+  //hh:mm:ss tt
+
+  //hour interpretation
+  if(int(tempRead[0]+tempRead[1])<10)//given its only one digit hour
   {
-    if(Serial.available()>0)
+    if(tempRead[9]+tempRead[10]=="PM")//conversion to 24-hour time
     {
-      t = Serial.read(); 
-      break;
+      tempTime.Hour = int(tempRead[0])+12;
+    }else
+    {
+      tempTime.Hour = int(tempRead[0]);
+    }
+    //minute interpretation
+    tempTime.Minute = int(tempRead[3]+tempRead[4]);
+    //second interpretation
+    tempTime.Second = int(tempRead[6]+tempRead[7]);
+  }else//two digit long hours
+  {
+    if(int(tempRead[0]+tempRead[1])==12)//conversion for AM/PM 12 times specifically
+    {
+      if(tempRead[10]+tempRead[11]=="PM")
+      {
+        tempTime.Hour = int(tempRead[0]+tempRead[1]);
+      }else
+      {
+        tempTime.Hour = 0;
+      }
+      //minute interpretation
+      tempTime.Minute = int(tempRead[3]+tempRead[4]);
+      //second interpretation
+      tempTime.Second = int(tempRead[6]+tempRead[7]);
+    }else//blankets for 10/11
+    {
+      if(tempRead[10]+tempRead[11]=="PM")
+      {
+        tempTime.Hour = int(tempRead[0]+tempRead[1])+12;
+      }else
+      {
+        tempTime.Hour = int(tempRead[0]+tempRead[1]);
+      }
+      //minute interpretation
+      tempTime.Minute = int(tempRead[3]+tempRead[4]);
+      //second interpretation
+      tempTime.Second = int(tempRead[6]+tempRead[7]);
     }
   }
+
+  //Date send signal
+  if(Serial.available()==0)
+  {//output command to gobetwino
+    Serial.println("#S|D|[]#");
+  }
+
+  tempRead = Serial.readString();
+
+  //interpret dates and times
+  tempTime.Day = int(tempRead[0]+tempRead[1]);
+  tempTime.Month = int(tempRead[3]+tempRead[4]);
+  tempTime.Year = int(tempRead[6]+tempRead[7]+tempRead[8]+tempRead[9]);
+
+  t = makeTime(tempTime);
+
   return t;
-
-
-  //note commented code will be for GUI
-  /*//create TimeElements variable
-  tm total;
-
-  //get the current time from the computer
-  //note: this is specifically for a windows computer
-  //if it is running another OS, will need to be changed
-  SYSTEMTIME st;
-  GetSystemTime(&st);
-
-  //placing current time into package
-  total.Year = st.wYear;
-  total.Month = st.wMonth;
-  total.Day = st.wDay;
-  total.Hour = st.wHour;
-  total.Minute = st.wMinute;
-  total.Second = st.wSecond;
-
-  return makeTime(total);*/
 }
 
 //func sendTime tells sends the current time to BC
