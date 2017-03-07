@@ -11,10 +11,12 @@ It also contains current tasks and extra information on function
 ###Current send time format
 time_t variable type
 #####File Format
-time_stamp,1234,1234,1234
+time_stamp,temp,humd,lumi
 
-###Windows Time long time format
+####Windows Time-long format
 h:mm:ss tt
+####Windows Date-short format
+DD:MM:YYYY
 
 ###Current task List
 Josh P.
