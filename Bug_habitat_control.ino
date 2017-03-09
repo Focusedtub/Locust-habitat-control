@@ -142,6 +142,9 @@ TimeElements recTime(){
 void ccTimeSend()
 {
   time_t t;
+  
+  t = now();
+  
   while(true)
   {
     if(rf12_canSend())
