@@ -29,7 +29,7 @@ Josh P.
 - [x]Project design presentation/*          */Feb 16, 2017
 - [x]Write to file/*                        */Mar 02, 2017
 - [x]Read time from gobetwino/*             */Mar 07, 2017
-- [ ]Read from GUI
+- [x]Read from GUI/*                        */Mar 09, 2017
 - [ ]Technical report
 - [ ]integrate
 
