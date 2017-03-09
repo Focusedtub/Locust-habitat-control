@@ -59,10 +59,8 @@ void loop() {
   
   
   //reading in data from the USB port
-  if(loopCounter==50||loopCounter==100)
+  if(Serial.available()>0)
   {
-    if(Serial.available()>0)//port has data to read
-    {
       for(int i=0; i!=Serial.available();i++)//for each bit available to read
       {
         sBit = Serial.read();//up for revision, may require different
@@ -86,7 +84,6 @@ void loop() {
       {
         //what?
       }
-    }
   }
 
   //Writing current data to the file for GUI processing
@@ -122,7 +119,7 @@ void loop() {
     writeCount++;
   }
 
-  
+  loopCounter++;
   //current delay set as 0.1 second/s
   delay(100);
 }
