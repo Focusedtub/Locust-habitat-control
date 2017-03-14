@@ -2,23 +2,23 @@
 The files here contain the necessary programs needed to run the habitat control.
 It also contains current tasks and extra information on function
 
-####Current Identifier list
+#### Current Identifier list
 1. Send time
 2. Send time up
 3. Send time down
 4. Time reset
 
-###Current send time format
+### Current send time format
 time_t variable type
-#####File Format
+##### File Format
 time_stamp,temp,humd,lumi
 
-####Windows Time-long format
+#### Windows Time-long format
 h:mm:ss tt
-####Windows Date-short format
+#### Windows Date-short format
 DD:MM:YYYY
 
-###Current task List
+### Current task List
 Josh P.
 - [x]Project design rough/*                 */Jan 24, 2017
 - [x]Create github/*                        */Jan 26, 2016
@@ -49,7 +49,7 @@ Siyu Z.
 - []
 
 
-###Current Function list
+### Current Function list
 #### Computer Control
 - timeRoll: Tests to see if the hour needs to be reset to 0 or 23. Returns time in hours.
 - getTime: Gets current time from the computer. returns time in a time_t format.
