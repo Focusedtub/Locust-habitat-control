@@ -97,13 +97,19 @@ void loop() {
     if(Serial.available()==0)
     {
       Serial.println("#|TOFILE|[");
-      //timestamp: hour:minute:second
+      //timestamp: day,month,year,hour,minute,second
+      Serial.print(day());
+      Serial.print(",");
+      Serial.print(month());
+      Serial.print(",");
+      Serial.print(year());
+      Serial.print(",");
       Serial.print(hour());
-      Serial.print(":");
+      Serial.print(",");
       Serial.print(minute());
-      Serial.print(":");
+      Serial.print(",");
       Serial.print(second());
-      Serial.print(", ");
+      Serial.print(",");
       //temperature
       Serial.print(temp);
       Serial.print(",");;
