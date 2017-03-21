@@ -8,10 +8,11 @@ It also contains current tasks and extra information on function
 3. Send time down
 4. Time reset
 
-### Current send time format
+### Current send time format(jeenode<->jeenode)
 time_t variable type
 ##### File Format
-time_stamp,temp,humd,lumi
+mm,dd,yyyy,hh,mm,ss,temp,humd,lumi
+time sent will be 24 hour time format
 
 #### Windows Time-long format
 h:mm:ss tt
@@ -32,6 +33,7 @@ Josh P.
 - [x]Read from GUI/*                        */Mar 09, 2017
 - [x]Technical report/*                     */Mar 09, 2017
 - [ ]integrate
+- [ ]Testing/debugging
 
 Ian B.
 - []
