@@ -11,7 +11,7 @@ It also contains current tasks and extra information on function
 ### Current send time format(jeenode<->jeenode)
 time_t variable type
 ##### File Format
-mm,dd,yyyy,hh,mm,ss,temp,humd,lumi
+dd,mm,yyyy,hh,mm,ss,temp,humd,lumi
 time sent will be 24 hour time format
 
 #### Windows Time-long format
