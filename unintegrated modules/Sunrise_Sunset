@@ -1,0 +1,21 @@
+#include <JeeLib.h>
+Port port = Port(2);
+void setup(){
+Serial.begin(115200);
+Serial.println("JeeNode LED");
+port.mode(OUTPUT);
+port.mode2(INPUT);
+}
+
+int x;
+void loop(){
+  for (x=0;;x++){
+    port.anaWrite(x);
+    delay(15);
+    Serial.println(x);
+    if (x==255){
+      x=0;
+    }
+  }
+
+}
