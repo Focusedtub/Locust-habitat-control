@@ -151,87 +151,182 @@ int timeRoll()
   return Test;
 }
 
+//func ascToInt converts an ascii number to an integer
+int ascToInt(char a)
+{
+  int temp;
+  temp =int(a);
+
+  if(temp==47)
+  {
+    return -1;// for /
+  }else if(temp==48)
+  {
+    return 0;
+  }else if(temp==49)
+  {
+    return 1;
+  }else if(temp==50)
+  {
+    return 2;
+  }else if(temp==51)
+  {
+    return 3;
+  }else if(temp==52)
+  {
+    return 4;
+  }else if(temp==53)
+  {
+    return 5;
+  }else if(temp==54)
+  {
+    return 6;
+  }else if(temp==55)
+  {
+    return 7;
+  }else if(temp==56)
+  {
+    return 8;
+  }else if(temp==57)
+  {
+    return 9;
+  }else if(temp==58)
+  {
+    return -2; // for :
+  }else
+  {
+    return -3; //for anything else
+  }
+}
+
 //function getTime gets the current time from the computer system
 //its connected to
 time_t getTime()
 {
-    time_t t;
-  TimeElements tempTime;
-  String tempRead;
+  tmElements_t tempTime;
+  String timeRead,dateRead;
+  bool c=true;
 
-  
-  if(Serial.available()==0)
-  {//output command to gobetwino
-    Serial.println("#S|T|[]#");
+  while(true)
+  {
+    if(Serial.availableForWrite()>0)
+    {//output command to gobetwino for send time
+      Serial.println("#S|T|[]#");
+      while(true)
+      {
+        if(Serial.available()>0)
+        {
+          Serial.println("it works!");
+          timeRead = Serial.readString();
+          Serial.println(timeRead);
+          
+          delay(1000);
+          break;
+        }
+      }
+      break;
+    }
   }
   
-  tempRead = Serial.readString(); //read string received from gobetwino
-
-  //interpret string
-  //Time format
-  //hh:mm:ss tt
-
-  //hour interpretation
-  if(int(tempRead[0]+tempRead[1])<10)//given its only one digit hour
+  //date recieving
+  while(true)
   {
-    if(tempRead[9]+tempRead[10]=="PM")//conversion to 24-hour time
-    {
-      tempTime.Hour = int(tempRead[0])+12;
-    }else
-    {
-      tempTime.Hour = int(tempRead[0]);
-    }
-    //minute interpretation
-    tempTime.Minute = int(tempRead[3]+tempRead[4]);
-    //second interpretation
-    tempTime.Second = int(tempRead[6]+tempRead[7]);
-  }else//two digit long hours
-  {
-    if(int(tempRead[0]+tempRead[1])==12)//conversion for AM/PM 12 times specifically
-    {
-      if(tempRead[10]+tempRead[11]=="PM")
+    if(Serial.availableForWrite()>0)
+    {//output command to gobetwino for send time
+      Serial.println("#S|D|[]#");
+      while(true)
       {
-        tempTime.Hour = int(tempRead[0]+tempRead[1]);
-      }else
-      {
-        tempTime.Hour = 0;
+        if(Serial.available()>0)
+        {
+          Serial.println("it works!");
+          dateRead = Serial.readString();
+          Serial.println(dateRead);
+          
+          delay(1000);
+          break;
+        }
       }
-      //minute interpretation
-      tempTime.Minute = int(tempRead[3]+tempRead[4]);
-      //second interpretation
-      tempTime.Second = int(tempRead[6]+tempRead[7]);
-    }else//blankets for 10/11
-    {
-      if(tempRead[10]+tempRead[11]=="PM")
-      {
-        tempTime.Hour = int(tempRead[0]+tempRead[1])+12;
-      }else
-      {
-        tempTime.Hour = int(tempRead[0]+tempRead[1]);
-      }
-      //minute interpretation
-      tempTime.Minute = int(tempRead[3]+tempRead[4]);
-      //second interpretation
-      tempTime.Second = int(tempRead[6]+tempRead[7]);
+      break;
     }
   }
 
-  //Date send signal
-  if(Serial.available()==0)
-  {//output command to gobetwino
-    Serial.println("#S|D|[]#");
+
+  //time computing
+  //6:19:19 PM
+  //0123456789
+  if(isSpace(timeRead.charAt(7)))//given the hour is only 1 digit long
+  {
+    if(timeRead.charAt(8)=='P')//given its PM
+    {
+      tempTime.Hour = ascToInt(timeRead.charAt(0))+12;  //18
+    }else{
+      tempTime.Hour = ascToInt(timeRead.charAt(0));     //6
+    }
+    //minutes and seconds are always two digits
+    tempTime.Minute = 10*ascToInt(timeRead.charAt(2))+ascToInt(timeRead.charAt(3));
+    tempTime.Second = 10*ascToInt(timeRead.charAt(5))+ascToInt(timeRead.charAt(6));
+  }else{//hour is two digits long
+    if(timeRead.charAt(9)=='P')//PM
+    {
+      if(ascToInt(timeRead.charAt(1))!=2)//not 12
+      {
+        tempTime.Hour = 10*ascToInt(timeRead.charAt(0))+ascToInt(timeRead.charAt(1))+12;
+      }else{
+        tempTime.Hour = 10*ascToInt(timeRead.charAt(0))+ascToInt(timeRead.charAt(1));
+      }
+    }else{
+      if(ascToInt(timeRead.charAt(1))!=2)//not 12
+      {
+        tempTime.Hour = 10*ascToInt(timeRead.charAt(0))+ascToInt(timeRead.charAt(1));
+      }else{
+        tempTime.Hour = 0;//using a 24 hour clock with 12:00 = 00:00
+      }
+    }
+    tempTime.Minute = 10*ascToInt(timeRead.charAt(3))+ascToInt(timeRead.charAt(4));
+    tempTime.Second = 10*ascToInt(timeRead.charAt(6))+ascToInt(timeRead.charAt(7));        
   }
 
-  tempRead = Serial.readString();
+  //date computing
+  //3/23/2017
+  //012345678
+  if(dateRead.charAt(1)=='/')//month is 1 digit long
+  {
+    tempTime.Month = ascToInt(dateRead.charAt(0));
+    
+    if(dateRead.charAt(3)=='/')//day is only 1 digit
+    {
+      tempTime.Day = ascToInt(dateRead.charAt(2));
+      tempTime.Year = 1000*ascToInt(dateRead.charAt(4))+
+                       100*ascToInt(dateRead.charAt(5))+
+                        10*ascToInt(dateRead.charAt(6))+
+                           ascToInt(dateRead.charAt(7))-1970;
+    }else{//day is two digits
+      tempTime.Day = 10*ascToInt(dateRead.charAt(2))+ascToInt(dateRead.charAt(3));
+      tempTime.Year = 1000*ascToInt(dateRead.charAt(5))+
+                       100*ascToInt(dateRead.charAt(6))+
+                        10*ascToInt(dateRead.charAt(7))+
+                           ascToInt(dateRead.charAt(8))-1970;
+    }
+  }else{
+    tempTime.Month = 10*ascToInt(dateRead.charAt(0))+ascToInt(dateRead.charAt(1));
+    
+    if(dateRead.charAt(4)=='/')//day is only 1 digit
+    {
+      tempTime.Day = ascToInt(dateRead.charAt(3));
+      tempTime.Year = 1000*ascToInt(dateRead.charAt(5))+
+                       100*ascToInt(dateRead.charAt(6))+
+                        10*ascToInt(dateRead.charAt(7))+
+                           ascToInt(dateRead.charAt(8))-1970;
+    }else{//day is two digits
+      tempTime.Day = 10*ascToInt(dateRead.charAt(3))+ascToInt(dateRead.charAt(4));
+      tempTime.Year = 1000*ascToInt(dateRead.charAt(6))+
+                       100*ascToInt(dateRead.charAt(7))+
+                        10*ascToInt(dateRead.charAt(8))+
+                           ascToInt(dateRead.charAt(9))-1970;
+    }
+  }
 
-  //interpret dates and times
-  tempTime.Day = int(tempRead[0]+tempRead[1]);
-  tempTime.Month = int(tempRead[3]+tempRead[4]);
-  tempTime.Year = int(tempRead[6]+tempRead[7]+tempRead[8]+tempRead[9]);
-
-  t = makeTime(tempTime);
-
-  return t;
+  return makeTime(tempTime);
 }
 
 //func sendTime tells sends the current time to BC
