@@ -1,0 +1,29 @@
+
+#define RF69_COMPAT 1
+#include<TimeLib.h>
+#include<JeeLib.h>
+
+
+void setup() {
+  // put your setup code here, to run once:
+
+  Serial.begin(19200);
+  Serial.println("RF test module reciever");
+
+  rf12_initialize(12,RF12_915MHZ,212);
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  int recieved =0;
+
+  if(rf12_recvDone())
+  {
+    memcpy(&recieved,(int*)rf12_data,sizeof(int));
+    Serial.print("Data has been recieved:")
+    Serial.print(recieved);
+    Serial.println("");
+  }
+
+}
