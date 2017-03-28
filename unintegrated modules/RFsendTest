@@ -1,0 +1,34 @@
+#define RF69_COMPAT 1
+#include<TimeLib.h>
+#include<JeeLib.h>
+
+void setup() {
+  //Output test paramaters\
+  Serial.begin(19200);
+  Serial.println("RF test module sender");
+
+  rf12_initialize(12,RF12_915MHZ,212);
+
+}
+
+void loop() {
+  int Signal = 322;
+  sendSignal(Signal);
+  
+  delay(1000);
+
+}
+
+void sendSignal(int Signal)
+{
+  bool c=true;
+  while(c)
+  {
+    if(rf12_canSend())
+    {
+      rf12_sendStart(0,&Signal,sizeof(int));\
+      
+    }
+    rf12_recvDone();
+  }
+}
