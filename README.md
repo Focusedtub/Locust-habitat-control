@@ -36,7 +36,7 @@ Josh P.
 - [x]Read from GUI/*                        */Mar 09, 2017
 - [x]Technical report/*                     */Mar 09, 2017
 - [ ]integrate
-- [ ]Testing/debugging
+- [x]Testing/debugging/*                    */Mar 28, 2017
 
 Ian B.
 - []
