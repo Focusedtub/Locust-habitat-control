@@ -7,8 +7,22 @@ liveUpdating = None
 
 plt.ion()
 
-fig, ax = plt.subplots()
+#fig, ax = plt.subplots()
 plt.subplots_adjust(bottom=0.2)
+ax = plt.subplot(131)
+ax.set_title('Temperature vs Time')
+ax.set_xlabel('Time (s)')
+ax.set_ylabel('Temperature (C)')
+ax = plt.subplot(132)
+ax.set_title('Humidity vs Time')
+ax.set_xlabel('Time (s)')
+ax.set_ylabel('Humidity (%)')
+ax = plt.subplot(133)
+ax.set_title('Luminosity vs Time')
+ax.set_xlabel('Time (s)')
+ax.set_ylabel('Luminosity (Lux)')
+
+
 #l, = plt.plot(t, s, lw=2)
 
 
@@ -46,9 +60,9 @@ callback = Index()
                     #0.81, 0.05, 0.1, 0.075
 axprev = plt.axes([.7, .05, 0.1, 0.075])
 axnext = plt.axes([0.81, 0.05, 0.1, 0.075])
-bnext = Button(axnext, 'Next')
+bnext = Button(axnext, 'Last Week')
 bnext.on_clicked(callback.next)
-bprev = Button(axprev, 'Previous')
+bprev = Button(axprev, 'Real Time')
 bprev.on_clicked(callback.prev)
 
 plt.show()
