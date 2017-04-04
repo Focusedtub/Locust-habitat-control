@@ -1,34 +1,40 @@
-#define RF69_COMPAT 1
 #include<TimeLib.h>
 #include<JeeLib.h>
+#define RF69_COMPAT 1
+
 
 void setup() {
-  //Output test paramaters\
+  //Serial setup
   Serial.begin(19200);
-  Serial.println("RF test module sender");
+  //command line notifier
+  Serial.println("RF test sender");
 
   rf12_initialize(12,RF12_915MHZ,212);
-
 }
 
 void loop() {
-  int Signal = 322;
-  sendSignal(Signal);
+  //
+  double luminosity=1.12, humidity=2.21, temperature=3.34;
+
+  luminosity =100*luminosity;
+  humidity =100*humidity;
+  temperature =100*temperature;
+
+  int sendVariable,iLuminosity,iHumidity,iTemperature;
+  iLuminosity = luminosity*100;
+  iHumidity = humidity*100;
+  iTemperature = temperature*100;
+  sendVariable = iTemperature*2^28+iHumidity*2^14+iLuminosity;
+
   
-  delay(1000);
-
-}
-
-void sendSignal(int Signal)
-{
-  bool c=true;
-  while(c)
+ 
+  if(rf12_canSend())
   {
-    if(rf12_canSend())
-    {
-      rf12_sendStart(0,&Signal,sizeof(int));\
-      
-    }
+    rf12_sendStart(0,&sendVariable,sizeof(int));
+    rf12_sendWait(2);
     rf12_recvDone();
   }
+
+  
+  delay(1000);
 }
