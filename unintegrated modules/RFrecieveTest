@@ -1,29 +1,74 @@
-
-#define RF69_COMPAT 1
 #include<TimeLib.h>
 #include<JeeLib.h>
+#define RF69_COMPAT 1
 
-
+int lc=0;
 void setup() {
-  // put your setup code here, to run once:
-
+  //Serial setup
   Serial.begin(19200);
-  Serial.println("RF test module reciever");
+  //command line notifier
+  Serial.println("RF test receiver");
 
-  rf12_initialize(12,RF12_915MHZ,212);
+  setTime(12,0,0,4,1,2017);
+
+  rf12_initialize(11,RF12_915MHZ,212);
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  int recieved =0;
+  double luminosity, humidity, temperature;
+  int received;
 
   if(rf12_recvDone())
   {
-    memcpy(&recieved,(int*)rf12_data,sizeof(int));
-    Serial.print("Data has been recieved:")
-    Serial.print(recieved);
-    Serial.println("");
-  }
+    lc++;
+    memcpy(&received,int(rf12_data),sizeof(int));
 
+    luminosity = (received/2^28)/100;
+    humidity = ((received/2^14)&(2^14-1))/100;
+    temperature = received&(2^14-1)/100;
+
+    Serial.println("Received attempt#");
+    Serial.print(lc);
+    Serial.println("");
+    Serial.print("Luminosity(received):");
+    Serial.print(luminosity);
+    Serial.println("");
+    Serial.print("Luminosity(expected):1.12");
+    Serial.println("Humidity(received):");
+    Serial.print(humidity);
+    Serial.println("Humidity(expected):2.21");
+    Serial.println("");
+    Serial.print("Temperature(received):");
+    Serial.print(temperature);
+    Serial.println("Temperature(expected):3.34");
+    Serial.println("");
+
+    //Gobetwino stuff
+//    Serial.println("#S|TOFILE|[");
+//    Serial.print(day());
+//    Serial.print(",");
+//    Serial.print(month());
+//    Serial.print(year());
+//    Serial.print(",");
+//    Serial.print(hour());
+//    Serial.print(",");
+//    Serial.print(minute());
+//    Serial.print(",");
+//    Serial.print(second());
+//    Serial.print(",");
+//    //temperature
+//    Serial.print(temperature);
+//    Serial.print(",");;
+//    //humidity
+//    Serial.print(humiditiy);
+//    Serial.print(",");
+//    //luminosity
+//    Serial.print(luminosity);
+//    //end of output
+//    Serial.print("]#");
+     
+  }
+  
+  delay(100);
 }
