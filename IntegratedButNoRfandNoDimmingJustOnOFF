@@ -1,0 +1,119 @@
+#include "DHT.h"
+#include "JeeLib.h"
+#include <SparkFunTSL2561.h>
+#define DHTPIN 5 // this is the position of the data pin on the jeenode starting at I is 1
+#define DHTTYPE DHT22
+//#define PORT 2
+//#define PORT 1
+//#define PORT 3
+//#define Port 4
+int LED_pin = 4;
+
+//Port port2 = Port(2);
+Port port1 = Port(1);
+Port port3 = Port(3);
+Port port4 = Port(4);
+SFE_TSL2561 light;
+DHT dht(DHTPIN, DHTTYPE);
+boolean gain;     // Gain setting, 0 = X1, 1 = X16;
+unsigned int ms;  // Integration ("shutter") time in milliseconds
+void setup() { 
+Serial.begin(9600);
+dht.begin();
+light.begin();
+port1.mode(OUTPUT); //INPUT, mode2 INPUT OUTPUT
+//pinMode(LED_pin,OUTPUT);
+port4.mode(OUTPUT);
+port4.mode2(INPUT);
+  unsigned char ID;
+  
+  if (light.getID(ID))
+  {
+    Serial.print("Got factory ID: 0X");
+    Serial.print(ID,HEX);
+    Serial.println(", should be 0X5X");
+  }  else
+  {
+    byte error = light.getError();
+   // printError(error);
+  }
+    gain = 0;
+  unsigned char time = 2;
+
+  // setTiming() will set the third parameter (ms) to the
+  // requested integration time in ms (this will be useful later):
+  
+  Serial.println("Set timing...");
+  light.setTiming(gain,time,ms);
+
+  // To start taking measurements, power up the sensor:
+  
+  Serial.println("Powerup...");
+  light.setPowerUp();
+
+
+}
+void loop() {
+port1.digiWrite(HIGH);
+port4.anaWrite(0);
+  unsigned int data0, data1;
+
+//digitalWrite(LED_pin,HIGH);
+delay(2000);
+float h = dht.readHumidity();
+float t = dht.readTemperature();
+if (isnan(h) || isnan(t)){
+Serial.println("Failed to read from DHT sensor!");
+return;}
+Serial.print("Humidity: ");
+Serial.print(h);
+Serial.print(" %\t");
+Serial.print("Temperature: ");
+Serial.print(t);
+Serial.print(" *C ");
+Serial.print("\n");
+if(t > 15){
+   Serial.print("over 15");
+  }
+
+if (light.getData(data0,data1))
+  {
+    // getData() returned true, communication was successful
+    
+    Serial.print("data0: ");
+    Serial.print(data0);
+    Serial.print(" data1: ");
+    Serial.print(data1);
+  
+    // To calculate lux, pass all your settings and readings
+    // to the getLux() function.
+    
+    // The getLux() function will return 1 if the calculation
+    // was successful, or 0 if one or both of the sensors was
+    // saturated (too much light). If this happens, you can
+    // reduce the integration time and/or gain.
+    // For more information see the hookup guide at: https://learn.sparkfun.com/tutorials/getting-started-with-the-tsl2561-luminosity-sensor
+  
+    double lux;    // Resulting lux value
+    boolean good;  // True if neither sensor is saturated
+    
+    // Perform lux calculation:
+
+    good = light.getLux(gain,ms,data0,data1,lux);
+    
+    // Print out the results:
+  
+    Serial.print(" lux: ");
+    Serial.print(lux);
+    if (good) Serial.println(" (good)"); else Serial.println(" (BAD)");
+  }
+  else
+  {
+    // getData() returned false because of an I2C error, inform the user.
+
+    byte error = light.getError();
+//    printError(error);
+  }
+
+  
+}
