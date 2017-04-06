@@ -106,7 +106,7 @@ if (light.getData(data0,data1))
  if(good){
   real_lux = data0;
   }else{
- real_lux = 12.34;
+ real_lux = 999;
   }
  lux_value = (int)real_lux;
  luxDecimalTimesAHundred = (real_lux - lux_value)*100;
@@ -117,7 +117,7 @@ if (light.getData(data0,data1))
 if (!isnan(t)){
  real_heat = t;
 }else{
-   real_heat = 46.78;
+   real_heat = 999;
 
   }
  heat_value = (int)real_heat;
@@ -129,7 +129,7 @@ if (!isnan(t)){
 if (!isnan(h)){
  real_hum = h;
 }else{
-  real_hum = 89.01;
+  real_hum = 999;
   }
  hum_value = (int)real_hum;
  humDecimalTimesAHundred = (real_hum - hum_value)*100;
@@ -173,6 +173,10 @@ Serial.print(data1);
  while(!rf12_canSend()) rf12_recvDone(); // wait for any receiving to finish
  if(!lux_decimal_exists){
     rf12_sendStart(0, &lux_value,sizeof(int)); // send the “lux_value” through RF to other JeeNode boards
+    delay(500);
+    rf12_sendStart(0, &decimal,sizeof(int)); // send the “lux_value” through RF to other JeeNode boards
+    delay(500);
+    rf12_sendStart(0, &luxDecimalTimesAHundred,sizeof(int)); // send the “lux_value” through RF to other JeeNode boards
     delay(500);
     rf12_sendStart(0, &seperatoluxheat,sizeof(int)); // send the “lux_value” through RF to other JeeNode boards
     delay(500);
@@ -222,4 +226,3 @@ Serial.print(data1);
 
 }
  
-
