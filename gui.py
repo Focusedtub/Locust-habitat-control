@@ -25,27 +25,44 @@ ax.set_ylabel('Luminosity (Lux)')
 
 #l, = plt.plot(t, s, lw=2)
 
-
+temporary = []
+previousValue = ""
+stringbuilder = ""
 temp = []
 hum = []
 lum = []
-timeStamp =[]
+timeStamptemp =[]
+timeStamphum = []
+timeStamplum = []
+i_hum = 0
+i_lum = 0
+i_temp = 0
+n_hum = 0
+n_temp = 0
+n_lum = 0
+tenCounterhum = 5
+tenCounterlum = 5
+tenCountertemp = 5
+tempisFloat = False
+humisFloat = False
+lumisFloat = False
+
+nextValueisEndDecimal = False
+finishedreading = False
 
 scriptpath = os.path.dirname(__file__)
-filename = os.path.join(scriptpath, 'test.txt')
+filename = os.path.join(scriptpath, 'log.txt')
 
 class Index(object):
     ind = 0
 
     def next(self, event):
         liveUpdating = False
-        print(liveUpdating)
         #ydata = np.sin(2*np.pi*freqs[i]*t)
         #l.set_ydata(ydata)
         #plt.draw()
 
     def prev(self, event):
-        liveUpdating = False
         self.ind -= 1
         i = self.ind % len(freqs)
         ydata = np.sin(2*np.pi*freqs[i]*t)
@@ -68,14 +85,86 @@ bprev.on_clicked(callback.prev)
 plt.show()
 
 def readDataintoArray():
+    global nextValueisEndDecimal
+    global stringbuilder
+    global i_lum
+    global i_hum
+    global i_temp
+    global n_hum
+    global n_lum
+    global n_temp
+    global tenCounterhum
+    global tenCounterlum 
+    global tenCountertemp
+    global hum
+    global temp
+    global lum
+    global timeStamphum
+    global timeStamplum
+    global timeStamptemp
+    
     with open(filename,"r") as f:
+        #line= (f.readlines()[-1]).rstrip('\n')
         for line in f:
-            data = line.rstrip('\n').split(',')
-            timeStamp.append(data[6])
-            temp.append(data[7])
-            hum.append(data[8])
-            lum.append(data[9])
-            #print("updated Arrays")
+            line = line.rstrip('\n')
+            if(nextValueisEndDecimal):
+                stringbuilder += line
+                nextValueisEndDecimal = False
+            if(line == '-1'):
+                try:
+                    float(stringbuilder)
+                    lumisFloat = True
+                except ValueError:
+                    lumisFloat = False
+                if(lumisFloat):
+                    lum.append(stringbuilder)
+                    timeStamplum.append(i_lum)
+                    i_lum += 1
+                    print("lum : " + stringbuilder)
+                stringbuilder = ""
+            elif (line == '-2'):
+                try:
+                    float(stringbuilder)
+                    tempisFloat = True
+                except ValueError:
+                    tempisFloat = False
+                if(tempisFloat):
+                    temp.append(stringbuilder)
+                    timeStamptemp.append(i_temp)
+                    i_temp += 1
+                    print("temp : " + stringbuilder)
+                strinbuilder = ""
+            elif (line == '-3'):
+                try:
+                    float(stringbuilder)
+                    humisFloat = True
+                except ValueError:
+                    humisFloat = False
+                if(humisFloat):
+                    hum.append(stringbuilder)
+                    timeStamphum.append(i_hum)
+                    i_hum += 1
+                    print("hum : " + stringbuilder)
+                stringbuilder = ""
+            elif (line == '-4'):
+                    stringbuilder = previousValue + "."
+                    nextValueisEndDecimal = True
+            previousValue = line
+            if(len(hum) > 10):
+                n_hum = n_hum+tenCounterhum
+                #tenCounterhum += 5
+                #hum =  hum[n_hum:]
+                #timeStamphum =  timeStamphum[n_hum:]
+            if(len(temp) > 10):
+                n_temp = n_temp+tenCountertemp
+                #tenCountertemp += 5
+                #temp =  temp[n_temp:]
+                #timeStamptemp =  timeStamptemp[n_temp:]
+            if(len(lum) > 10):
+                n_lum = n_lum+tenCounterlum
+                #tenCounterlum += 5
+                #lum =  lum[n_lum:]
+                #timestamplum =  timeStamplum[n_lum:]
 
 def updateData():
     with open(filename,"a") as f:
@@ -83,18 +172,16 @@ def updateData():
     #print("updated data")
 
 readDataintoArray()
-#liveUpdating = True
+
 while True:
-    print(liveUpdating)
     if  (liveUpdating == None):
         plt.subplot(131)
-        plt.scatter(timeStamp, temp)
+        plt.plot(timeStamptemp, temp)
         plt.subplot(132)
-        plt.scatter(timeStamp,hum)
+        plt.plot(timeStamphum,hum)
         plt.subplot(133)
-        plt.scatter(timeStamp,lum)
+        plt.plot(timeStamplum,)
         plt.pause(0.05)
-        updateData()
         readDataintoArray()
 
 while True:
